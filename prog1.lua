@@ -2,6 +2,7 @@
 -- prog1.lua
 -- Glenn G. Chappell
 -- 1 Feb 2016
+-- Updated: 3 Feb 2016
 --
 -- For CS 331 Spring 2016
 -- Lua: Programming I
@@ -163,10 +164,21 @@ if 1+1 == 2 then
 end
 
 -- if-then-else
-if 4*5 ~= 20 then  -- not-equal operator
-    io.write("4*5 ~= 20\n")
+if 4*5 ~= 30 then  -- not-equal operator
+    io.write("4*5 ~= 30\n")
 else
-    io.write("4*5 == 20\n")
+    io.write("4*5 == 30\n")
+end
+
+-- also elseif
+if 2+3 == 3 then
+    io.write("2+3 == 2\n")
+elseif 2+3 == 4 then
+    io.write("2+3 == 4\n")
+elseif 2+3 == 5 then
+    io.write("2+3 == 5\n")
+else
+    io.write("2+3 is some other value\n")
 end
 
 -- while-loop
