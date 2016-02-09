@@ -102,6 +102,7 @@ function lexer.lex(prog)
 
     local DONE = 0
     local START = 1
+    local LETTER = 2
 
     -- ***** Character-Related Functions *****
 
@@ -111,6 +112,14 @@ function lexer.lex(prog)
     -- the end.
     local function currChar()
         return prog:sub(pos, pos)
+    end
+
+    -- nextChar
+    -- Return the next character, at index pos+1 in prog. Return value
+    -- is a single-character string, or the empty string if pos+1 is past
+    -- the end.
+    local function nextChar()
+        return prog:sub(pos+1, pos+1)
     end
 
     -- drop1
@@ -131,7 +140,26 @@ function lexer.lex(prog)
     -- Skip whitespace and comments, moving pos to the beginning of
     -- the next lexeme, or to prog:len()+1.
     local function skipWhitespace()
-        -- WRITE THIS!!!
+        while true do
+            while isWhitespace(currChar()) do
+                drop1()
+            end
+
+            if (currChar() ~= "/") or (nextChar() ~= "*") then
+                break
+            end
+            drop1()
+            drop1()
+
+            while true do
+                if (currChar() == "*") and (nextChar() == "/") then
+                    drop1()
+                    drop1()
+                    break
+                end
+                drop1()
+            end
+        end
     end
 
     -- ***** State-Handler Functions *****
@@ -142,9 +170,26 @@ function lexer.lex(prog)
     end
 
     local function handle_START()
-        add1()
-        state = DONE
-        category = PUNCT
+        if isLetter(ch) or ch == "_" then
+            add1()
+            state = LETTER
+        else
+            add1()
+            state = DONE
+            category = PUNCT
+        end
+    end
+
+    local function handle_LETTER()
+        if isLetter(ch) or isDigit(ch) or ch == "_" then
+            add1()
+        else
+            state = DONE
+            category = ID
+            if lexstr == "begin" or lexstr == "end" or lexstr == "print" then
+                category = KEY
+            end
+        end
     end
 
     -- ***** Table of State-Handler Functions *****
@@ -152,6 +197,7 @@ function lexer.lex(prog)
     handlers = {
         [DONE]=handle_DONE,
         [START]=handle_START,
+        [LETTER]=handle_LETTER
     }
 
     -- ***** Iterator Function *****
