@@ -188,13 +188,13 @@ function lexer.lex(prog)
     end
 
     local function handle_START()
-        if isLetter(ch) or ch == "_" then
-            add1()
-            state = LETTER
-        elseif isIllegal(ch) then
+        if isIllegal(ch) then
             add1()
             state = DONE
             category = MAL
+        elseif isLetter(ch) or ch == "_" then
+            add1()
+            state = LETTER
         else
             add1()
             state = DONE
