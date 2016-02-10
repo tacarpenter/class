@@ -1,6 +1,6 @@
 -- lexer.lua  UNFINISHED
 -- Glenn G. Chappell
--- 8 Feb 2016
+-- 9 Feb 2016
 --
 -- For CS 331 Spring 2016
 -- In-Class Lexer Module
@@ -69,6 +69,21 @@ local function isWhitespace(c)
         return true
     else
         return false
+    end
+end
+
+
+-- isIllegal
+-- Returns true if string c is an illegal character, false otherwise.
+local function isIllegal(c)
+    if c:len() ~= 1 then
+        return false
+    elseif isWhitespace(c) then
+        return false
+    elseif c >= " " and c <= "~" then
+        return false
+    else
+        return true
     end
 end
 
@@ -164,6 +179,9 @@ function lexer.lex(prog)
 
     -- ***** State-Handler Functions *****
 
+    -- A function with a name like handle_XYZ is the handler function
+    -- for state XYZ
+
     local function handle_DONE()
         io.write("ERROR: 'DONE' state should not be handled\n")
         assert(0)
@@ -173,6 +191,10 @@ function lexer.lex(prog)
         if isLetter(ch) or ch == "_" then
             add1()
             state = LETTER
+        elseif isIllegal(ch) then
+            add1()
+            state = DONE
+            category = MAL
         else
             add1()
             state = DONE
@@ -186,7 +208,9 @@ function lexer.lex(prog)
         else
             state = DONE
             category = ID
-            if lexstr == "begin" or lexstr == "end" or lexstr == "print" then
+            if lexstr == "begin"
+              or lexstr == "end"
+              or lexstr == "print" then
                 category = KEY
             end
         end
