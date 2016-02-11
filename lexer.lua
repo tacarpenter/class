@@ -1,6 +1,6 @@
--- lexer.lua  UNFINISHED
+-- lexer.lua
 -- Glenn G. Chappell
--- 9 Feb 2016
+-- 10 Feb 2016
 --
 -- For CS 331 Spring 2016
 -- In-Class Lexer Module
@@ -98,6 +98,9 @@ function lexer.lex(prog)
     -- ***** Variables (like class data members) *****
 
     local pos       -- Index of next character in prog
+                    -- INVARIANT: when getLexeme is called, pos is
+                    --  EITHER the index of the first character of the
+                    --  next lexeme OR len+1
     local state     -- Current state for our state machine
     local ch        -- Current character
     local lexstr    -- The lexeme, so far
@@ -118,6 +121,11 @@ function lexer.lex(prog)
     local DONE = 0
     local START = 1
     local LETTER = 2
+    local DIGIT = 3
+    local DIGDOT = 4
+    local PLUS = 5
+    local MINUS = 6
+    local DOT = 7
 
     -- ***** Character-Related Functions *****
 
@@ -195,6 +203,22 @@ function lexer.lex(prog)
         elseif isLetter(ch) or ch == "_" then
             add1()
             state = LETTER
+        elseif isDigit(ch) then
+            add1()
+            state = DIGIT
+        elseif ch == "+" then
+            add1()
+            state = PLUS
+        elseif ch == "-" then
+            add1()
+            state = MINUS
+        elseif ch == "." then
+            add1()
+            state = DOT
+        elseif ch == "=" then
+            add1()
+            state = DONE
+            category = OP
         else
             add1()
             state = DONE
@@ -216,12 +240,98 @@ function lexer.lex(prog)
         end
     end
 
+    local function handle_DIGIT()
+        if isDigit(ch) then
+            add1()
+        elseif ch == "." then
+            add1()
+            state = DIGDOT
+        else
+            state = DONE
+            category = NUMLIT
+        end
+    end
+
+    local function handle_DIGDOT()
+        if isDigit(ch) then
+            add1()
+        else
+            state = DONE
+            category = NUMLIT
+        end
+    end
+
+    local function handle_PLUS()
+        if ch == "+" or ch == "=" then
+            add1()
+            state = DONE
+            category = OP
+        elseif isDigit(ch) then
+            add1()
+            state = DIGIT
+        elseif ch == "." then
+            if isDigit(nextChar()) then
+                add1()
+                add1()
+                state = DIGDOT
+            else
+                state = DONE
+                category = OP
+            end
+        else
+            state = DONE
+            category = OP
+        end
+    end
+
+    local function handle_MINUS()
+        if ch == "-" or ch == "=" then
+            add1()
+            state = DONE
+            category = OP
+        elseif isDigit(ch) then
+            add1()
+            state = DIGIT
+        elseif ch == "." then
+            if isDigit(nextChar()) then
+                add1()
+                add1()
+                state = DIGDOT
+            else
+                state = DONE
+                category = OP
+            end
+        else
+            state = DONE
+            category = OP
+        end
+    end
+
+    local function handle_DOT()
+        if isDigit(ch) then
+            add1()
+            state = DIGDOT
+        elseif ch == "=" or ch == "*" then
+            add1()
+            state = DONE
+            category = OP
+        else
+            state = DONE
+            category = OP
+        end
+    end
+
     -- ***** Table of State-Handler Functions *****
 
     handlers = {
         [DONE]=handle_DONE,
         [START]=handle_START,
-        [LETTER]=handle_LETTER
+        [LETTER]=handle_LETTER,
+        [DIGIT]=handle_DIGIT,
+        [DIGDOT]=handle_DIGDOT,
+        [PLUS]=handle_PLUS,
+        [MINUS]=handle_MINUS,
+        [DOT]=handle_DOT
     }
 
     -- ***** Iterator Function *****
@@ -231,6 +341,9 @@ function lexer.lex(prog)
     -- Returns a pair: lexeme-string (string) and category (int), or
     -- nil, nil if no more lexemes.
     local function getLexeme(dummy1, dummy2)
+        if pos > prog:len() then
+            return nil, nil
+        end
         lexstr = ""
         state = START
         while state ~= DONE do
