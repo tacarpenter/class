@@ -2,6 +2,7 @@
 -- userdparser1.lua
 -- Glenn G. Chappell
 -- 12 Feb 2016
+-- Revised: 12 Feb 2016
 --
 -- For CS 331 Spring 2016
 -- Simple Main Program for rdparser1 Module
@@ -33,5 +34,9 @@ end
 io.write("Recursive-Descent Parser: Simple\n")
 check("abc3")
 check("345")
-check("(((abc_3)))")
+check("(abc_3)")
+check("((((___g___))))")
+check("((xyz)")
+check("(xyz))         # Think about how the parser should handle this")
+check("((q123)))))))  # Think about how the parser should handle this")
 

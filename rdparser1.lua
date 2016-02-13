@@ -1,10 +1,18 @@
--- rdparser1.lua  UNFINISHED
+-- rdparser1.lua
 -- Glenn G. Chappell
 -- 12 Feb 2016
+-- Revised 12 Feb 2016
 --
 -- For CS 331 Spring 2016
 -- Recursive-Descent Parser: Simple
 -- Requires lexer.lua
+
+
+-- Grammar
+-- Start symbol: thing
+--
+--     thing  ->  ID
+--              | '(' thing ')'
 
 
 local rdparser1 = {}  -- Our module
@@ -95,6 +103,9 @@ end
 
 -- Primary Function for Client Code
 
+-- Define local functions for later calling (like prototypes in C++)
+local parse_thing
+
 -- parse
 -- Given program, initialize parser and call parsing function for start
 -- symbol. Returns pair of booleans. First indicates successful parse or
@@ -105,7 +116,7 @@ function rdparser1.parse(prog)
     init(prog)
 
     -- Get results from parsing
-    local success = false
+    local success = parse_thing()  -- Parse start symbol
 
     -- And return them
     return success
@@ -122,6 +133,24 @@ end
 -- are made about the current lexeme.
 
 
+-- parse_thing
+-- Parsing function for nonterminal "thing".
+-- Function init must be called before this function is called.
+function parse_thing()
+    if matchCat(ID) then
+        return true
+    elseif matchString("(") then
+        if not parse_thing() then
+            return false
+        end
+        if not matchString(")") then
+            return false
+        end
+        return true
+    else
+        return false
+    end
+end
 
 
 -- Module Export
