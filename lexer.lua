@@ -1,6 +1,7 @@
 -- lexer.lua
 -- Glenn G. Chappell
 -- 10 Feb 2016
+-- Updated: 14 Feb 2016
 --
 -- For CS 331 Spring 2016
 -- In-Class Lexer Module
@@ -168,17 +169,19 @@ function lexer.lex(prog)
                 drop1()
             end
 
-            if (currChar() ~= "/") or (nextChar() ~= "*") then
+            if currChar() ~= "/" or nextChar() ~= "*" then  -- Comment?
                 break
             end
             drop1()
             drop1()
 
             while true do
-                if (currChar() == "*") and (nextChar() == "/") then
+                if currChar() == "*" and nextChar() == "/" then
                     drop1()
                     drop1()
                     break
+                elseif currChar() == "" then  -- End of input?
+                   return
                 end
                 drop1()
             end
