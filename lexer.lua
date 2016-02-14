@@ -8,7 +8,7 @@
 
 -- Usage:
 --
---    program = "return a+b;"  -- program to lex
+--    program = "print a+b;"  -- program to lex
 --    for lexstr, cat in lexer.lex(program) do
 --        -- lexstr is the string form of a lexeme
 --        -- cat is the lexeme category
@@ -140,8 +140,8 @@ function lexer.lex(prog)
 
     -- nextChar
     -- Return the next character, at index pos+1 in prog. Return value
-    -- is a single-character string, or the empty string if pos+1 is past
-    -- the end.
+    -- is a single-character string, or the empty string if pos+1 is
+    -- past the end.
     local function nextChar()
         return prog:sub(pos+1, pos+1)
     end
