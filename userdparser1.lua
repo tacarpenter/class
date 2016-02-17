@@ -2,7 +2,7 @@
 -- userdparser1.lua
 -- Glenn G. Chappell
 -- 12 Feb 2016
--- Revised: 12 Feb 2016
+-- Revised: 15 Feb 2016
 --
 -- For CS 331 Spring 2016
 -- Simple Main Program for rdparser1 Module
@@ -19,12 +19,18 @@ function check(program)
     io.write(dashstr:rep(72).."\n")
     io.write("Program: "..program.."\n")
 
-    local good = rdparser1.parse(program)
+    local good, done = rdparser1.parse(program)
 
     if good then
-        io.write("Syntactically correct\n")
+        io.write("Syntactically correct; ")
     else
-        io.write("NOT SYNTACTICALLY CORRECT\n")
+        io.write("NOT SYNTACTICALLY CORRECT; ")
+    end
+
+    if done then
+        io.write("All input parsed\n")
+    else
+        io.write("NOT ALL INPUT PARSED\n")
     end
 end
 
@@ -37,6 +43,6 @@ check("345")
 check("(abc_3)")
 check("((((___g___))))")
 check("((xyz)")
-check("(xyz))         # Think about how the parser should handle this")
-check("((q123)))))))  # Think about how the parser should handle this")
+check("(xyz))")
+check("((q123)))))))")
 

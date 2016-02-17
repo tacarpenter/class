@@ -1,7 +1,7 @@
 -- rdparser1.lua
 -- Glenn G. Chappell
 -- 12 Feb 2016
--- Revised 12 Feb 2016
+-- Revised 15 Feb 2016
 --
 -- For CS 331 Spring 2016
 -- Recursive-Descent Parser: Simple
@@ -71,6 +71,14 @@ local function init(prog)
 end
 
 
+-- atEnd
+-- Return true if pos has reached end of input.
+-- Function init must be called before this function is called.
+local function atEnd()
+    return lexcat == 0
+end
+
+
 -- matchString
 -- Given string, see if current lexeme string form is equal to it. If
 -- so, then advance to next lexeme & return true. If not, then do not
@@ -106,6 +114,7 @@ end
 -- Define local functions for later calling (like prototypes in C++)
 local parse_thing
 
+
 -- parse
 -- Given program, initialize parser and call parsing function for start
 -- symbol. Returns pair of booleans. First indicates successful parse or
@@ -117,9 +126,10 @@ function rdparser1.parse(prog)
 
     -- Get results from parsing
     local success = parse_thing()  -- Parse start symbol
+    local done = atEnd()
 
     -- And return them
-    return success
+    return success, done
 end
 
 
