@@ -13,6 +13,7 @@ rdparser3 = require "rdparser3"
 -- writeAST
 -- Write an AST, in (roughly) Lua form.
 -- A table is assumed to represent an array.
+-- See rdparser3.lua for the AST Specification.
 function writeAST(x)
     if type(x) == "number" then
         io.write(x)
@@ -66,6 +67,14 @@ end
 -- Main program
 -- Check several "programs".
 io.write("Recursive-Descent Parser: Expression\n")
+check("abc")
+check("123")
+check("a b")
+check("3a")
+check("a + * b")
+check("a + b (* c)")
+check("a * -3")
+check("3 - a")
 check("a + +3 - c")
 check("a + b - c + d - e")
 check("a + (b - (c + (d - e)))")
