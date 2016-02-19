@@ -3,13 +3,14 @@
 -- 19 Feb 2016
 --
 -- For CS 331 Spring 2016
--- Recursive-Descent Parser: Expressions, symbolic constants in AST
+-- Recursive-Descent Parser: Expressions, symbols in AST, use $
 -- Requires lexer.lua
 
 
 -- Grammar
--- Start symbol: expr
+-- Start symbol: all
 --
+--     all     ->  expr $
 --     expr    ->  term { ('+' | '-') term }
 --     term    ->  factor { ('+' | '-') factor }
 --     factor  ->  ID
@@ -133,6 +134,7 @@ end
 -- Primary Function for Client Code
 
 -- Define local functions for later calling (like prototypes in C++)
+local parse_all
 local parse_expr
 local parse_term
 local parse_factor
@@ -147,11 +149,10 @@ function rdparser4.parse(prog)
     init(prog)
 
     -- Get results from parsing
-    local success, ast = parse_expr()  -- Parse start symbol
-    local done = atEnd()
+    local success, ast = parse_all()  -- Parse start symbol
 
     -- And return them
-    if success and done then
+    if success then
         return true, ast
     else
         return false, nil
@@ -169,6 +170,25 @@ end
 -- false, the AST is not valid, and no guarantees are made about the
 -- current lexeme. See the AST Specification near the beginning of this
 -- file for the format of the returned AST.
+
+
+-- parse_all
+-- Parsing function for nonterminal "all".
+-- Function init must be called before this function is called.
+function parse_all()
+    local good, ast
+
+    good, ast = parse_expr()
+    if not good then
+        return false, nil
+    end
+
+    if not atEnd() then
+        return false, nil
+    end
+
+    return true, ast
+end
 
 
 -- parse_expr
