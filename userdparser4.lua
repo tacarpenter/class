@@ -31,7 +31,7 @@ function writeAST_special(x)
             io.write(name)
         end
     elseif type(x) == "string" then
-        io.write('"'..x..'"') 
+        io.write('"'..x..'"')
     elseif type(x) == "boolean" then
         if x then
             io.write("true")

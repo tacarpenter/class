@@ -18,7 +18,7 @@ function writeAST(x)
     if type(x) == "number" then
         io.write(x)
     elseif type(x) == "string" then
-        io.write('"'..x..'"') 
+        io.write('"'..x..'"')
     elseif type(x) == "boolean" then
         if x then
             io.write("true")

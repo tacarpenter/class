@@ -53,7 +53,7 @@ function printTable(t)
         if type(p) == "number" then
             io.write(p)
         elseif type(p) == "string" then
-            io.write('"'..p..'"') 
+            io.write('"'..p..'"')
         elseif type(p) == "boolean" then
             if p then
                 io.write("true")
