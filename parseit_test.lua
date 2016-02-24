@@ -4,7 +4,7 @@
 -- 24 Feb 2016
 --
 -- For CS 331 Spring 2016
--- Test Program for Module lexit
+-- Test Program for Module parseit
 -- Used in Assignment 4, Exercise A
 
 parseit = require "parseit"  -- Import parseit module
