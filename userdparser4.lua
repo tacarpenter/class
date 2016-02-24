@@ -2,6 +2,7 @@
 -- userdparser4.lua
 -- Glenn G. Chappell
 -- 19 Feb 2016
+-- Updated: 24 Feb 2016
 --
 -- For CS 331 Spring 2016
 -- Simple Main Program for rdparser4 Module
@@ -17,12 +18,12 @@ symbolNames = {
   [3]="ID_VAL"
 }
 
--- writeAST_special
+-- writeAST_rdparser4
 -- Write an AST, in (roughly) Lua form, with numbers replaced by the
 -- symbolic constants used in rdparser4.
 -- A table is assumed to represent an array.
 -- See rdparser4.lua for the AST Specification.
-function writeAST_special(x)
+function writeAST_rdparser4(x)
     if type(x) == "number" then
         local name = symbolNames[x]
         if name == nil then
@@ -41,11 +42,11 @@ function writeAST_special(x)
     elseif type(x) == "table" then
         local first = true
         io.write("{")
-        for k, v in ipairs(x) do
+        for k = 1, #x do  -- ipairs is problematic
             if not first then
                 io.write(", ")
             end
-            writeAST_special(v)
+            writeAST_rdparser4(x[k])
             first = false
         end
         io.write("}")
@@ -69,7 +70,7 @@ function check(program)
 
     if good then
         io.write("AST: ")
-        writeAST_special(ast)
+        writeAST_rdparser4(ast)
         io.write("\n")
     else
         io.write("SYNTAX ERROR\n")

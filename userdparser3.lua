@@ -2,6 +2,7 @@
 -- userdparser3.lua
 -- Glenn G. Chappell
 -- 17 Feb 2016
+-- Updated: 24 Feb 2016
 --
 -- For CS 331 Spring 2016
 -- Simple Main Program for rdparser3 Module
@@ -28,11 +29,11 @@ function writeAST(x)
     elseif type(x) == "table" then
         local first = true
         io.write("{")
-        for k, v in ipairs(x) do
+        for k = 1, #x do  -- ipairs is problematic
             if not first then
                 io.write(", ")
             end
-            writeAST(v)
+            writeAST(x[k])
             first = false
         end
         io.write("}")
