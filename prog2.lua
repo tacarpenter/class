@@ -4,7 +4,7 @@
 -- 3 Feb 2016
 --
 -- For CS 331 Spring 2016
--- Lua: Programming II
+-- Code from 2/3: Lua Programming II
 
 
 io.write("This file contains sample code from February 3, 2016.\n")

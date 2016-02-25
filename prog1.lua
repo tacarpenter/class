@@ -5,7 +5,7 @@
 -- Updated: 3 Feb 2016
 --
 -- For CS 331 Spring 2016
--- Lua: Programming I
+-- Code from 2/1: Lua Programming I
 -- Requires mymod.lua
 
 
