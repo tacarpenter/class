@@ -3,7 +3,7 @@
 -- 1 Feb 2016
 --
 -- For CS 331 Spring 2016
--- Lua: Example Module
+-- Code from 2/1: Lua Example Module
 -- Not a complete program
 
 
