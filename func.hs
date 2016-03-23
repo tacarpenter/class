@@ -79,7 +79,7 @@ twicefactorial n = twice (factorial n) where
 -- Try:
 --   (addem 2) 3
 
--- Try: 
+-- Try:
 --   addem (2 3)
 -- You should get an error.
 

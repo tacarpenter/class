@@ -155,7 +155,7 @@ function astEq(ast1, ast2)
     if type(ast1) ~= type(ast2) then
         return false
     end
-    
+
     if type(ast1) ~= "table" then
         return ast1 == ast2
     end
@@ -197,7 +197,7 @@ function checkParse(t, prog, expectedGood, expectedAST, testName)
         sameAST = astEq(expectedAST, actualAST)
     end
     t:test(sameGood and sameAST, testName)
-        
+
     if not exit_on_failure or (sameGood and sameAST) then
         return
     end
