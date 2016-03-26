@@ -1,6 +1,8 @@
 -- pa5_test.hs
+-- VERSION 2
 -- Glenn G. Chappell
 -- 23 Mar 2016
+-- Updated: 25 Mar 2016
 --
 -- For CS 331 Spring 2016
 -- Test Program for Assignment 5 Functions & Variables
@@ -9,6 +11,7 @@
 module Main where
 
 import qualified PA5  -- For Assignment 5 Functions & Variables
+import Control.Applicative
 
 
 ------------------------------------------------------------------------
@@ -28,9 +31,18 @@ data TestState a = TS (Maybe a, IO a)
 tsMaybe (TS (x, y)) = x
 tsIO (TS (x, y)) = y
 
--- Make TestState a monad in the obvious way
+-- Make TestState a Functor in the obvious way
+instance Functor TestState where
+    fmap f (TS (a, b)) = TS (fmap f a, fmap f b)
+
+-- Make TestState an Applicative in the obvious way
+instance Applicative TestState where
+    pure a = TS (pure a, pure a)
+    TS (f, g) <*> TS (x, y) = TS (f <*> x, g <*> y) where
+
+-- Make TestState a Monad in the obvious way
 instance Monad TestState where
-    return a = TS (return a, return a)
+    return = pure
     TS (x, y) >>= f = TS (x >>= f1, y >>= f2) where
         f1 = tsMaybe . f
         f2 = tsIO . f
