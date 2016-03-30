@@ -7,6 +7,11 @@
 -- For Assignment 6, Exercise A
 
 
+-- ******************************************************************
+-- * To run a Zebu program, use zebu.lua (which calls this module). *
+-- ******************************************************************
+
+
 local interpit = {}  -- Our module
 
 
@@ -86,7 +91,36 @@ end
 -- Return Value:
 --   state updated with changed variable values
 function interpit.interp(ast, state, incall, outcall)
-    -- WRITE THIS!!!
+    -- Each local interpretation function is given the AST for the
+    -- portion of the code it is interpreting. The function-wide
+    -- versions of state, incall, and outcall may be used. The
+    -- function-wide version of state may be modified as appropriate.
+
+    local function interp_stmt(ast)
+        if (ast[1] == SET_STMT) then
+            outcall("[DUNNO WHAT TO DO!!!]\n")
+        elseif (ast[1] == PRINT_STMT) then
+            if (ast[2][1] == STRLIT_VAL) then
+                outcall(ast[2][2]:sub(2,ast[2][2]:len()-1))
+            else
+                outcall("[DUNNO WHAT TO DO!!!]\n")
+            end
+        elseif (ast[1] == NL_STMT) then
+            outcall("\n")
+        else
+            outcall("[DUNNO WHAT TO DO!!!]\n")
+        end
+    end
+
+    local function interp_stmt_list(ast)
+        assert(ast[1] == STMT_LIST)
+        for k = 2, #ast do
+            interp_stmt(ast[k])
+        end
+    end
+
+    interp_stmt_list(ast)
+    return state
 end
 
 
