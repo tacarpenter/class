@@ -2,6 +2,7 @@
 -- zebu.lua
 -- Glenn G. Chappell
 -- 30 Mar 2016
+-- Revised 3 Apr 2016
 --
 -- For CS 331 Spring 2016
 -- Interpreter for Zebu Programming Language
@@ -15,7 +16,7 @@ interpit = require "interpit"
 -- ***** Variables *****
 
 
-zebustate = { s={}, a={} }  -- Zebu state: variable values
+local zebustate = { s={}, a={} }  -- Zebu state: variable values
 
 
 -- ***** Utility Functions *****
@@ -96,6 +97,8 @@ function runFile(fname)
         end
     end
 
+    local success
+
     if not readable(fname) then
         io.write("*** ERROR: Zebu source file not readable\n")
         return
@@ -104,7 +107,7 @@ function runFile(fname)
     for line in io.lines(fname) do
         source = source .. line .. "\n"
     end
-    zebustate = runZebu(source, zebustate)
+    success, zebustate = runZebu(source, zebustate)
 end
 
 
@@ -114,6 +117,8 @@ end
 -- from it, execute, and exit. Otherwise, treat line as Zebu program,
 -- execute it, and REPEAT.
 function repl()
+    local success
+
     io.write("Type Zebu source filename (---.zebu) or Zebu program\n")
     io.write("Blank line to exit\n")
     while true do
@@ -125,7 +130,7 @@ function repl()
             runFile(line)
             break
         else
-            zebustate = runZebu(line, zebustate)
+            success, zebustate = runZebu(line, zebustate)
         end
         io.write("\n")
     end
