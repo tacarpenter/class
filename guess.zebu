@@ -1,0 +1,68 @@
+#!./zebu.lua
+# guess.zebu
+# Glenn G. Chappell
+# 7 Apr 2016
+#
+# For CS 331 Spring 2016
+# Number Guessing Game
+
+# Configuration
+set lo = 1        # Bottom of guessing range
+set hi = 100      # Top of guessing range
+set biggap = 10   # This far from guess: "much" too large/small
+set randval = 57  # Number to guess (same value every time <sigh>)
+
+# Print opening message
+print "I'm thinking of a number from "
+print lo
+print " to "
+print hi
+print "." nl
+print "Try to guess it!" nl
+nl
+
+# Loop until correct guess
+set notdone = 1   # Boolean flag for while loop
+while notdone
+    # Prompt & input
+    print "Type your guess: "
+    input guess
+    nl
+
+    # Print guess
+    print "You guessed "
+    print guess
+    print "." nl
+
+    # Print evaluation of guess
+    if (guess < lo) + (guess > hi)  # Use + as logical-OR
+        print "But my number is somewhere from "
+        print lo
+        print " to "
+        print hi
+        print "." nl
+    else
+        print "That is "
+        if guess <= randval-biggap
+            print "much too small!" nl
+        elseif guess >= randval+biggap
+            print "much too large!" nl
+        elseif guess < randval
+            print "too small." nl
+        elseif guess > randval
+            print "too large." nl
+        else
+            print "right!" nl
+            print "Yay!!!" nl
+            # We'ere done
+            set notdone = 0
+        end
+    end
+
+    # If guess was incorrect, print try-again message
+    if notdone
+       nl
+       print "Try again." nl
+    end
+end
+

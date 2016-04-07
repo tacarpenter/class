@@ -1,0 +1,25 @@
+#!./zebu.lua
+# fibo.zebu
+# Glenn G. Chappell
+# 7 Apr 2016
+#
+# For CS 331 Spring 2016
+# Compute Fibonacci Numbers
+
+print "Fibonacci Numbers" nl nl
+
+set count = 0
+set prevfibo = 1
+set currfibo = 0
+while count <= 68
+    print "F("
+    print count
+    print ") = "
+    print currfibo nl
+
+    set nextfibo = prevfibo + currfibo
+    set prevfibo = currfibo
+    set currfibo = nextfibo
+    set count = count+1
+end
+
